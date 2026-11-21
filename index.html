@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mansur & Zilola — Taklifnoma</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Great+Vibes&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, #fff5f8 0%, #f7dce5 100%);
+      font-family: 'Cormorant Garamond', serif;
+      overflow-x: hidden;
+      padding: 20px;
+    }
+
+    .stage {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      height: 560px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .envelope {
+      position: relative;
+      width: 340px;
+      height: 230px;
+      background: linear-gradient(145deg, #f5b8cb, #e89bb3);
+      border-radius: 12px;
+      box-shadow: 0 20px 45px rgba(168, 84, 112, 0.28);
+      transition: transform 0.9s ease, opacity 0.8s ease;
+      cursor: pointer;
+      overflow: visible;
+    }
+
+    .envelope::before {
+      content: "❦";
+      position: absolute;
+      top: 12px;
+      left: 14px;
+      font-size: 20px;
+      color: rgba(255, 255, 255, 0.65);
+      z-index: 4;
+    }
+    .envelope::after {
+      content: "❦";
+      position: absolute;
+      bottom: 12px;
+      right: 14px;
+      font-size: 20px;
+      color: rgba(255, 255, 255, 0.65);
+      transform: rotate(180deg);
+      z-index: 4;
+    }
+
+    .flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 135px;
+      background: linear-gradient(180deg, #f8c6d6 0%, #eca3ba 100%);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top center;
+      transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 3;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+    }
+
+    .pocket {
+      position: absolute;
+      inset: 0;
+      border: 1.5px solid rgba(255, 255, 255, 0.45);
+      border-radius: 12px;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .seal {
+      position: absolute;
+      top: 98px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #f3d299, #c8964e);
+      border: 2px solid #fff3db;
+      box-shadow: 0 6px 16px rgba(120, 72, 30, 0.35), inset 0 0 8px rgba(255,255,255,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
+      transition: transform 0.6s ease, opacity 0.5s ease;
+    }
+
+    .seal span {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 700;
+      font-size: 24px;
+      letter-spacing: 2px;
+      color: #5c3a14;
+      user-select: none;
+    }
+
+    .seal:hover {
+      transform: translateX(-50%) scale(1.06);
+    }
+
+    .stage.opened .flap {
+      transform: rotateX(180deg);
+      z-index: 1;
+    }
+    .stage.opened .seal {
+      opacity: 0;
+      transform: translateX(-50%) scale(0.4);
+      pointer-events: none;
+    }
+    .stage.opened .envelope {
+      transform: translateY(190px) scale(0.92);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .card {
+      position: absolute;
+      width: 100%;
+      max-width: 390px;
+      background: #fffdfd;
+      border-radius: 18px;
+      padding: 34px 26px;
+      text-align: center;
+      box-shadow: 0 18px 45px rgba(166, 92, 118, 0.22);
+      border: 1px solid #f2cfd9;
+      opacity: 0;
+      transform: translateY(40px) scale(0.94);
+      pointer-events: none;
+      transition: all 1s cubic-bezier(0.22, 1, 0.36, 1) 0.35s;
+    }
+
+    .stage.opened .card {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .card-inner {
+      border: 1px solid #edd0d9;
+      border-radius: 12px;
+      padding: 24px 18px;
+      position: relative;
+    }
+
+    .ornament {
+      color: #d494a7;
+      font-size: 20px;
+      letter-spacing: 6px;
+      margin-bottom: 8px;
+    }
+
+    .names {
+      font-family: 'Great Vibes', cursive;
+      font-size: 44px;
+      color: #9e4763;
+      line-height: 1.15;
+      margin: 6px 0 14px;
+    }
+
+    .invite-text {
+      font-size: 17px;
+      line-height: 1.55;
+      color: #5a444b;
+      margin-bottom: 20px;
+    }
+
+    .dates {
+      background: #fdf4f7;
+      border-radius: 10px;
+      padding: 14px 12px;
+      margin-bottom: 18px;
+      border: 1px dashed #e5b7c6;
+    }
+
+    .date-item {
+      font-size: 18px;
+      color: #7d364d;
+      margin: 6px 0;
+    }
+
+    .date-item strong {
+      font-weight: 700;
+    }
+
+    .address {
+      font-size: 16px;
+      color: #5a444b;
+      line-height: 1.45;
+      margin-bottom: 18px;
+    }
+
+    .map-btn {
+      display: inline-block;
+      padding: 11px 24px;
+      background: linear-gradient(135deg, #d8839e, #b85d7a);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      box-shadow: 0 6px 16px rgba(184, 93, 122, 0.3);
+      transition: transform 0.2s ease;
+    }
+
+    .map-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .music-toggle {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid #e7bcc9;
+      color: #9e4763;
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      font-size: 18px;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="stage" id="stage">
+    <div class="envelope" id="envelope" onclick="openInvitation()">
+      <div class="flap"></div>
+      <div class="pocket"></div>
+      <div class="seal"><span>MZ</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-inner">
+        <div class="ornament">✦ ❦ ✦</div>
+        <h1 class="names">Mansur &amp; Zilola</h1>
+        <p class="invite-text">
+          Qadrli yaqinlarimiz! Hayotimizning eng go‘zal va unutilmas kunlari — ikki yurak birlashuvi va yangi oilamiz poydevori qo‘yiladigan quvonchli onlarni siz bilan baham ko‘rishni istaymiz. Samimiy duolaringiz va tashrifingiz kechamizga fayz bag‘ishlaydi.
+        </p>
+
+        <div class="dates">
+          <div class="date-item"><strong>2026-yil 25-noyabr</strong> — Qiz bazm</div>
+          <div class="date-item"><strong>2026-yil 26-noyabr</strong> — Nikoh to‘yi</div>
+        </div>
+
+        <div class="address">
+          <strong>Manzil:</strong><br>
+          Qo‘rg‘ontepa tumani, Iftixor MFY,<br>Gulshan ko‘chasi, 50-uy
+        </div>
+
+        <a class="map-btn" href="https://maps.apple.com/maps?ll=40.75449427969404,72.75882526343618&q=40.75449427969404,72.75882526343618&t=m" target="_blank">
+          📍 Xaritada ko‘rish
+        </a>
+        <div class="ornament" style="margin-top: 14px; margin-bottom: 0;">✦</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="music-toggle" id="musicBtn" onclick="toggleMusic()" title="Musiqa">♪</button>
+
+  <script>
+    let audioCtx = null;
+    let isPlaying = false;
+    let waltzTimer = null;
+
+    const waltzNotes = [
+      [220.00, 440.00], [329.63, 523.25], [329.63, 493.88],
+      [174.61, 440.00], [261.63, 392.00], [261.63, 349.23],
+      [130.81, 329.63], [261.63, 392.00], [261.63, 523.25],
+      [196.00, 493.88], [293.66, 440.00], [293.66, 392.00],
+      [174.61, 440.00], [261.63, 523.25], [261.63, 587.33],
+      [164.81, 523.25], [261.63, 493.88], [261.63, 440.00],
+      [146.83, 392.00], [220.00, 349.23], [220.00, 329.63],
+      [164.81, 329.63], [246.94, 415.30], [246.94, 493.88]
+    ];
+
+    let step = 0;
+
+    function playNote(freq, duration, volume) {
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+      gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(volume, audioCtx.currentTime + 0.06);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    }
+
+    function startWaltz() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      isPlaying = true;
+      document.getElementById('musicBtn').textContent = '♫';
+
+      waltzTimer = setInterval(() => {
+        if (!isPlaying) return;
+        const pair = waltzNotes[step % waltzNotes.length];
+        const isFirstBeat = (step % 3 === 0);
+        playNote(pair[0], 1.1, isFirstBeat ? 0.09 : 0.045);
+        playNote(pair[1], 1.3, isFirstBeat ? 0.08 : 0.055);
+        step++;
+      }, 520);
+    }
+
+    function toggleMusic() {
+      if (isPlaying) {
+        isPlaying = false;
+        clearInterval(waltzTimer);
+        document.getElementById('musicBtn').textContent = '✕';
+      } else {
+        startWaltz();
+      }
+    }
+
+    function openInvitation() {
+      const stage = document.getElementById('stage');
+      if (!stage.classList.contains('opened')) {
+        stage.classList.add('opened');
+        document.getElementById('musicBtn').style.display = 'flex';
+        startWaltz();
+      }
+    }
+  </script>
+</body>
+</html>
